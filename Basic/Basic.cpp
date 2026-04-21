@@ -21,14 +21,18 @@ void processLine(std::string line, Program &program, EvalState &state);
 
 /* Main program */
 
+static bool g_quit = false;
+
 int main() {
     EvalState state;
     Program program;
     //cout << "Stub implementation of BASIC" << endl;
-    while (true) {
+    while (!g_quit) {
         try {
             std::string input;
-            getline(std::cin, input);
+            if (!std::getline(std::cin, input)) {
+                break;
+            }
             if (input.empty())
                 continue;
             processLine(input, program, state);
@@ -190,7 +194,8 @@ void processLine(std::string line, Program &program, EvalState &state) {
         return;
     } else if (cmd == "QUIT") {
         if (scanner.hasMoreTokens()) error("SYNTAX ERROR");
-        exit(0);
+        g_quit = true;
+        return;
     } else if (cmd == "HELP") {
         // optional; not tested
         return;
