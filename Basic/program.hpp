@@ -9,9 +9,7 @@
 #define _program_h
 
 #include <string>
-#include <vector>
-#include <set>
-#include <unordered_map>
+#include <map>
 #include "statement.hpp"
 
 
@@ -143,10 +141,22 @@ public:
     //more func to add
     //todo
 
+    // Helpers for execution control
+    bool hasLine(int lineNumber);
+    void setNextLineNumber(int lineNumber);
+    int consumeNextLineNumber();
+    void requestEnd();
+    bool consumeEndRequested();
+
 private:
 
-    // Fill this in with whatever types and instance variables you need
-    //todo
+    // Map line number -> source line text (including the line number's following content)
+    std::map<int, std::string> sourceLines;
+    // Map line number -> parsed statement pointer (owned here)
+    std::map<int, Statement*> parsed;
+
+    int nextLineOverride{0};
+    bool endRequested{false};
 };
 
 #endif
